@@ -42,7 +42,7 @@ run_flowchart() {
     node ~/Projects/pit-crew/bin/browse.js \
         "file://$DIR/deliverables/flowchart.html" \
         "$DIR/deliverables/flowchart.png" \
-        1200 800
+        2400 1600
 }
 
 case "$CMD" in

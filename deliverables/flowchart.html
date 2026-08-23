@@ -1,16 +1,452 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Pledgecheck flowchart — STUB</title>
+<title>Pledgecheck — the Checkability Gate workflow</title>
+<!-- Deliverable 1, ML & Prompt Engineering track. Built to docs/FLOWCHART-SPEC.md.
+     Self-contained: no external request of any kind, macOS system faces only.
+     Render: ./run.sh flowchart  ->  deliverables/flowchart.png at 2400x1600. -->
 <style>
-  html, body { margin: 0; padding: 0; width: 1200px; height: 800px; background: #0b1220; }
-  .wrap { width: 1200px; height: 800px; display: flex; align-items: center; justify-content: center; }
-  .stub { font: 700 96px/1 -apple-system, "Helvetica Neue", Arial, sans-serif; color: #ffcc00;
-          letter-spacing: 0.05em; }
+  :root{
+    --paper:#F3F0E8;
+    --panel:#EAE5D8;
+    --ink:#15191E;
+    --ink-2:#4A535E;
+    --rule:#CFC7B4;
+    --code:#0F5D53;
+    --code-tint:#DCE7E2;
+    --code-dim:#9FB3AD;
+    --model:#8F4513;
+    --model-line:#A9591F;
+    --serif:"Iowan Old Style", Charter, Georgia, serif;
+    --sans:"Avenir Next", "Helvetica Neue", Arial, sans-serif;
+    --mono:"SF Mono", Menlo, "Courier New", monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{width:2400px;height:1600px;overflow:hidden}
+  body{background:var(--paper);color:var(--ink);font-family:var(--sans);
+       -webkit-font-smoothing:antialiased;position:relative}
+
+  /* ---------------- masthead ---------------- */
+  .masthead{position:absolute;left:96px;top:72px;width:2208px;height:176px;
+            display:flex;justify-content:space-between;align-items:flex-start}
+  .wordmark{font-size:28px;font-weight:600;letter-spacing:.28em;color:var(--code);
+            margin-bottom:18px}
+  .question{font-family:var(--serif);font-size:56px;line-height:1.16;max-width:1500px}
+  .meta{border:1px solid var(--rule);padding:16px 24px;min-width:430px}
+  .meta div{font-size:15px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-2);
+            line-height:1.8;font-weight:600}
+  .meta div.lead{color:var(--ink)}
+  .hair{position:absolute;left:96px;top:262px;width:2208px;height:2px;background:var(--ink)}
+
+  /* ---------------- spine ---------------- */
+  .spinehead{position:absolute;left:96px;top:282px;width:2208px;height:28px;display:flex}
+  .lbl{font-size:19px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;
+       white-space:nowrap}
+  .lbl-l{width:320px;color:var(--model)}
+  .lbl-r{width:320px;color:var(--model);text-align:right}
+  .lbl-c{width:1376px;color:var(--code);padding-left:20px}
+  .sp{width:96px;flex:0 0 96px}
+
+  .spine{position:absolute;left:96px;top:320px;width:2208px;height:578px;display:flex}
+  .gap{width:96px;flex:0 0 96px;display:flex;flex-direction:column;align-items:center;
+       justify-content:center;gap:8px;padding-top:40px}
+  .gaplbl{font-family:var(--mono);font-size:14px;color:var(--ink-2);text-align:center;
+          line-height:1.3}
+
+  .card{flex:0 0 320px;width:320px;background:var(--paper);
+        border:3px dashed var(--model-line);border-radius:6px;padding:18px 20px 16px;
+        display:flex;flex-direction:column}
+  .chip{display:inline-block;font-size:15px;letter-spacing:.16em;text-transform:uppercase;
+        font-weight:600;padding:5px 12px;border-radius:3px;align-self:flex-start}
+  .chip-model{background:var(--model-line);color:var(--paper)}
+  .chip-core{background:var(--code);color:var(--paper);font-size:17px;padding:6px 15px}
+  .nodenum{font-family:var(--mono);font-size:17px;color:var(--model);margin-top:12px}
+  .nodenum-c{color:var(--code-dim);margin-top:0}
+  .nodetitle{font-size:34px;font-weight:600;line-height:1.05;margin-top:2px}
+  .nodetitle-model{color:var(--model)}
+  .nodetitle-core{color:var(--paper)}
+  .grid{margin-top:14px;display:flex;flex-direction:column;gap:11px}
+  .grid .k{font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;
+           color:var(--ink-2)}
+  .card-core .grid .k{color:var(--code-dim)}
+  .grid .v{font-size:18px;line-height:1.32}
+  .card-core .grid .v{color:var(--paper)}
+  .mono{font-family:var(--mono);font-size:16px}
+  .mono-s{font-family:var(--mono);font-size:15px;line-height:1.36}
+  .on-code{color:var(--code)}
+  .on-code-lite{color:#5FD3B8}
+  .amber{color:var(--model)}
+
+  /* the core slab: ONE object, three sections */
+  .slab{flex:0 0 1376px;width:1376px;background:var(--ink);border:3px solid var(--code);
+        border-radius:6px;padding:14px;display:flex;flex-direction:column;position:relative}
+  .slab-inner{display:flex;flex:1 1 auto;margin-top:12px}
+  .sec{padding:0 18px;display:flex;flex-direction:column}
+  .sec + .sec{border-left:1px solid #33473F}
+  .sec-n2{flex:0 0 314px}
+  .sec-n3{flex:0 0 692px}
+  .sec-n4{flex:0 0 314px}
+
+  .probes{margin-top:12px;display:flex;flex-direction:column}
+  .probe{display:flex;align-items:center;height:46px;padding:0 8px;gap:12px}
+  .probe.alt{background:#1E2A28}
+  .clause{font-family:var(--mono);font-size:15px;color:var(--code-tint);
+          border:1px solid #3E5A52;border-radius:3px;padding:3px 6px;flex:0 0 104px;
+          text-align:center}
+  .pname{font-size:23px;font-weight:600;color:var(--paper);flex:0 0 206px}
+  .pcite{font-size:15px;color:var(--code-dim);flex:1 1 auto;line-height:1.25}
+  .pfired{font-family:var(--mono);font-size:15px;color:var(--code-tint);
+          flex:0 0 62px;text-align:right}
+  .returns{margin-top:12px;font-size:16px;color:var(--code-tint);font-family:var(--mono)}
+  .purity{margin-top:12px;padding:10px 18px 2px;border-top:1px solid #33473F;
+          display:flex;justify-content:space-between;align-items:baseline;gap:24px}
+  .purity .l{font-family:var(--mono);font-size:15px;color:var(--code-tint)}
+  .purity .r{font-size:16px;color:var(--code-dim)}
+
+  /* ---------------- plinth ---------------- */
+  .plinth{position:absolute;left:512px;top:942px;width:1376px;height:112px;
+          background:var(--panel);border:1px solid var(--rule);padding:14px 22px;
+          display:flex;flex-direction:column;justify-content:space-between}
+  .plinth-row{display:flex;align-items:center;gap:11px}
+  .cite-chip{font-size:16px;font-weight:600;color:var(--code);border:1px solid var(--code);
+             border-radius:3px;padding:4px 10px;white-space:nowrap}
+  .uparrow{position:absolute;left:1176px;top:900px;width:48px;height:42px}
+
+  .human{position:absolute;font-size:14px;letter-spacing:.12em;text-transform:uppercase;
+         font-weight:600;color:var(--code);border-left:3px solid var(--code);
+         padding-left:10px;line-height:1.5}
+  .human span{display:block;letter-spacing:.01em;text-transform:none;font-weight:400;
+              font-size:16px;color:var(--ink-2);line-height:1.32;margin-top:3px}
+
+  /* ---------------- panels ---------------- */
+  .panels{position:absolute;left:96px;top:1090px;width:2208px;height:288px;display:flex;gap:30px}
+  .panel{flex:1 1 0;background:var(--panel);border:1px solid var(--rule);padding:16px 20px;
+         display:flex;flex-direction:column}
+  .ph{font-size:20px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+      padding-bottom:8px;border-bottom:2px solid var(--ink);margin-bottom:12px}
+  .ph-model{color:var(--model);border-bottom-color:var(--model-line)}
+  .quote{font-family:var(--serif);font-size:19px;line-height:1.34}
+  .u-code{border-bottom:3px solid var(--code);padding-bottom:1px}
+  .lamps{display:flex;gap:8px;align-items:center;margin:12px 0 9px}
+  .lampbox{display:flex;flex-direction:column;align-items:center;gap:4px;width:96px}
+  .lampbox .t{font-size:13px;line-height:1.15;text-align:center;color:var(--ink-2)}
+  .lampbox .t.off{color:var(--model);font-weight:600}
+  .score{font-size:22px;font-weight:600;color:var(--code)}
+  .small{font-size:16px;line-height:1.36}
+  .tiny{font-family:var(--mono);font-size:14px;color:var(--ink-2);line-height:1.45}
+  .ks{display:flex;gap:16px;align-items:stretch;margin-bottom:12px}
+  .kscol{flex:1 1 0;border:1px solid var(--rule);padding:8px 10px;background:var(--paper)}
+  .kscol .h{font-size:13px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;
+            margin-bottom:7px}
+  .pips{display:flex;gap:5px}
+  .pip{height:18px;flex:1 1 0;border-radius:2px}
+  .pip-m{background:var(--model-line)}
+  .pip-c{background:var(--ink)}
+  .pip-off{background:var(--paper);border:2px dashed var(--rule)}
+  .pipnames{display:flex;gap:5px;margin-top:5px}
+  .pipnames span{flex:1 1 0;font-size:12px;text-align:center;color:var(--ink-2)}
+
+  /* ---------------- legend ---------------- */
+  .legend{position:absolute;left:96px;top:1398px;width:2208px;height:40px;
+          display:flex;align-items:center;gap:30px}
+  .tag{display:flex;align-items:center;gap:9px;font-size:16px;color:var(--ink-2)}
+  .tag b{color:var(--ink);font-size:17px}
+  .sw{width:22px;height:22px;flex:0 0 22px}
+  .legend .right{margin-left:auto;font-family:var(--mono);font-size:15px;color:var(--ink-2);
+                 white-space:nowrap}
+
+  /* ---------------- footer ---------------- */
+  .footer{position:absolute;left:0;top:1460px;width:2400px;height:140px;background:var(--ink);
+          color:var(--paper);padding:22px 96px;display:flex;align-items:center;
+          justify-content:space-between;gap:56px}
+  .thesis{font-family:var(--serif);font-style:italic;font-size:30px;line-height:1.34;
+          max-width:1400px}
+  .facts{font-family:var(--mono);font-size:16px;line-height:1.8;color:var(--code-dim);
+         text-align:right;white-space:nowrap}
+  .facts b{color:var(--paper);font-weight:400}
 </style>
 </head>
 <body>
-  <div class="wrap"><div class="stub">STUB</div></div>
+
+<!-- ============ MASTHEAD ============ -->
+<div class="masthead">
+  <div>
+    <div class="wordmark">PLEDGECHECK</div>
+    <div class="question">Which of this company&rsquo;s climate promises<br>can anyone actually check?</div>
+  </div>
+  <div class="meta">
+    <div class="lead">Reverie Hacks 2026</div>
+    <div>Track &middot; ML &amp; Prompt Engineering</div>
+    <div>5 nodes &middot; 3 code &middot; 2 model</div>
+    <div>67 tests green &middot; 97 frozen claims</div>
+  </div>
+</div>
+<div class="hair"></div>
+
+<!-- ============ SPINE HEADER ============ -->
+<div class="spinehead">
+  <div class="lbl lbl-l">Model layer</div>
+  <div class="sp"></div>
+  <div class="lbl lbl-c">Deterministic core</div>
+  <div class="sp"></div>
+  <div class="lbl lbl-r">Model layer</div>
+</div>
+
+<!-- ============ SPINE ============ -->
+<div class="spine">
+
+  <!-- N1 -->
+  <div class="card">
+    <div class="chip chip-model">Model</div>
+    <div class="nodenum">N1</div>
+    <div class="nodetitle nodetitle-model">SEGMENT</div>
+    <div class="grid">
+      <div><div class="k">Does</div><div class="v">Splits report prose into atomic claim sentences.</div></div>
+      <div><div class="k">Reads</div><div class="v mono-s">corpus/documents.json</div><div class="v">8 documents &middot; 4 Observed, 4 Simulated</div></div>
+      <div><div class="k">Model</div><div class="v mono-s amber">gemini-3.6-flash<br>&nbsp;&rarr; featherless<br>&nbsp;&nbsp;&nbsp;&nbsp;DeepSeek-V3-0324</div></div>
+      <div><div class="k">Returns</div><div class="v mono-s">claims.frozen.jsonl</div><div class="v">97 claims. Run <b>once</b>, committed.</div></div>
+      <div><div class="k">Model off</div><div class="v on-code"><b>Reads the frozen file. No call.</b></div></div>
+    </div>
+  </div>
+
+  <div class="gap">
+    <svg width="96" height="30" aria-hidden="true">
+      <line x1="0" y1="15" x2="78" y2="15" stroke="#15191E" stroke-width="3"/>
+      <polygon points="78,7 96,15 78,23" fill="#15191E"/>
+    </svg>
+    <div class="gaplbl">frozen<br>claims</div>
+  </div>
+
+  <!-- CORE SLAB -->
+  <div class="slab card-core">
+    <div class="chip chip-core">No network &middot; no model &middot; Python stdlib only &middot; 0 prompts</div>
+    <div class="slab-inner">
+
+      <!-- N2 -->
+      <div class="sec sec-n2">
+        <div class="nodenum nodenum-c">N2</div>
+        <div class="nodetitle nodetitle-core">NORMALISE</div>
+        <div class="grid">
+          <div><div class="k">Does</div><div class="v">Trims, de-duplicates, assigns each claim a stable id.</div></div>
+          <div><div class="k">Reads</div><div class="v">The frozen claim set. Nothing else.</div></div>
+          <div><div class="k">Returns</div><div class="v mono-s">id = sha256(text)[:12]</div><div class="v">plus document provenance and epistemic tag.</div></div>
+          <div><div class="k">Model off</div><div class="v on-code-lite"><b>Identical.</b></div></div>
+        </div>
+      </div>
+
+      <!-- N3 -->
+      <div class="sec sec-n3">
+        <div class="nodenum nodenum-c">N3</div>
+        <div class="nodetitle nodetitle-core">CHECKABILITY GATE</div>
+        <div class="probes">
+          <div class="probe alt">
+            <div class="clause">C1-QTY</div>
+            <div class="pname">quantity</div>
+            <div class="pcite">GHG Protocol, ch.9</div>
+            <div class="pfired">26/97</div>
+          </div>
+          <div class="probe">
+            <div class="clause">C2-TGTYR</div>
+            <div class="pname">target year</div>
+            <div class="pcite">SBTi Net-Zero v1.2 &sect;4.2</div>
+            <div class="pfired">24/97</div>
+          </div>
+          <div class="probe alt">
+            <div class="clause">C3-BASEYR</div>
+            <div class="pname">baseline year</div>
+            <div class="pcite">GHG Protocol, ch.5</div>
+            <div class="pfired">13/97</div>
+          </div>
+          <div class="probe">
+            <div class="clause">C4-STD</div>
+            <div class="pname">named standard</div>
+            <div class="pcite">TCFD Recommendations 2017</div>
+            <div class="pfired">21/97</div>
+          </div>
+          <div class="probe alt">
+            <div class="clause">C5-ACTOR</div>
+            <div class="pname">accountable party</div>
+            <div class="pcite">ISSB IFRS S2, &sect;6</div>
+            <div class="pfired">11/97</div>
+          </div>
+        </div>
+        <div class="returns">returns { present, span, clause_id } &times; 5 &nbsp;&rarr;&nbsp; score 0&ndash;5 &nbsp;&rarr;&nbsp; band</div>
+      </div>
+
+      <!-- N4 -->
+      <div class="sec sec-n4">
+        <div class="nodenum nodenum-c">N4</div>
+        <div class="nodetitle nodetitle-core">AGGREGATE</div>
+        <div class="grid">
+          <div><div class="k">Does</div><div class="v">Rolls scores up per document and across the corpus.</div></div>
+          <div><div class="k">Reads</div><div class="v">Probe verdicts and the rule pack&rsquo;s band thresholds.</div></div>
+          <div><div class="k">Returns</div><div class="v">97 claims &middot; 19.6% checkable &middot; 5 bands, Unverifiable to Fully Checkable.</div></div>
+          <div><div class="k">Model off</div><div class="v on-code-lite"><b>Identical.</b></div></div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="purity">
+      <div class="l">core/probes.py &nbsp;core/engine.py &nbsp;core/scoring.py &nbsp;&mdash;&nbsp; imports: re, json, hashlib, dataclasses, pathlib</div>
+      <div class="r">tests/test_purity.py fails the build the moment that list grows.</div>
+    </div>
+  </div>
+
+  <div class="gap">
+    <svg width="96" height="30" aria-hidden="true">
+      <line x1="0" y1="15" x2="78" y2="15" stroke="#15191E" stroke-width="3"/>
+      <polygon points="78,7 96,15 78,23" fill="#15191E"/>
+    </svg>
+    <div class="gaplbl">scores,<br>read-only</div>
+  </div>
+
+  <!-- N5 -->
+  <div class="card">
+    <div class="chip chip-model">Model</div>
+    <div class="nodenum">N5</div>
+    <div class="nodetitle nodetitle-model">EXPLAIN</div>
+    <div class="grid">
+      <div><div class="k">Does</div><div class="v">Writes the one-line rewrite that <i>would</i> make a failing claim checkable.</div></div>
+      <div><div class="k">Reads</div><div class="v">The score &mdash; <b>read-only.</b></div><div class="v amber"><b>N5 cannot change it.</b></div></div>
+      <div><div class="k">Model</div><div class="v mono-s amber">gemini-3.6-flash<br>&nbsp;&rarr; featherless<br>&nbsp;&nbsp;&nbsp;&nbsp;DeepSeek-V3-0324</div></div>
+      <div><div class="k">Returns</div><div class="v">93 real rewrites, each tagged <b>Generated</b>.</div></div>
+      <div><div class="k">Model off</div><div class="v mono-s">[model layer disabled]</div><div class="v on-code"><b>Scores untouched.</b></div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ============ PLINTH ============ -->
+<svg class="uparrow" viewBox="0 0 48 42" aria-hidden="true">
+  <line x1="24" y1="42" x2="24" y2="16" stroke="#15191E" stroke-width="3"/>
+  <polygon points="14,18 24,0 34,18" fill="#15191E"/>
+</svg>
+<div class="plinth">
+  <div class="plinth-row">
+    <div class="mono" style="font-size:18px"><b>rules/climate.v1.json</b>&nbsp; v1.0.0</div>
+    <div style="font-size:17px;color:var(--ink-2)">&mdash; versioned data, not code. Every clause carries its citation:</div>
+    <div class="cite-chip">GHG Protocol</div>
+    <div class="cite-chip">SBTi Net-Zero v1.2</div>
+    <div class="cite-chip">TCFD 2017</div>
+    <div class="cite-chip">ISSB IFRS S2</div>
+  </div>
+  <div style="font-size:18px">
+    Swap this file for <span class="mono" style="font-size:17px">rules/hiring.v1.json</span> &mdash; five different probes, the same engine, the same flowchart.
+    <b>Zero lines of engine change.</b>
+  </div>
+</div>
+
+<div class="human" style="left:96px;top:942px;width:320px">Human input
+  <span>A person chooses the 8 documents.</span></div>
+<div class="human" style="left:1984px;top:942px;width:320px">Human input
+  <span>A person writes the clauses and their citations &mdash; before the run, never during it.</span></div>
+<div style="position:absolute;left:512px;top:1062px;width:1376px;text-align:center;
+            font-size:18px;font-weight:600;color:var(--ink)">
+  No human input anywhere in N2&ndash;N4. The Gate cannot be tuned at run time.</div>
+
+<!-- ============ PANELS ============ -->
+<div class="panels">
+
+  <!-- kill switch -->
+  <div class="panel">
+    <div class="ph">The kill switch</div>
+    <div class="ks">
+      <div class="kscol">
+        <div class="h">Model on</div>
+        <div class="pips">
+          <div class="pip pip-m"></div><div class="pip pip-c"></div>
+          <div class="pip pip-c"></div><div class="pip pip-c"></div><div class="pip pip-m"></div>
+        </div>
+        <div class="pipnames"><span>N1</span><span>N2</span><span>N3</span><span>N4</span><span>N5</span></div>
+      </div>
+      <div class="kscol">
+        <div class="h">Model off</div>
+        <div class="pips">
+          <div class="pip pip-off"></div><div class="pip pip-c"></div>
+          <div class="pip pip-c"></div><div class="pip pip-c"></div><div class="pip pip-off"></div>
+        </div>
+        <div class="pipnames"><span>N1</span><span>N2</span><span>N3</span><span>N4</span><span>N5</span></div>
+      </div>
+    </div>
+    <div class="tiny">$ ./run.sh killswitch &nbsp;&nbsp;(sets PLEDGECHECK_NO_MODEL=1)<br>
+      8e5110de&hellip;&nbsp; MODEL ON &nbsp;(provider: featherless)<br>
+      8e5110de&hellip;&nbsp; MODEL OFF (provider: none)</div>
+    <div class="score" style="margin-top:9px">DIFF: IDENTICAL</div>
+    <div class="small" style="margin-top:5px">93 explanations vanish. <b>0 verdicts change.</b></div>
+  </div>
+
+  <!-- worked example -->
+  <div class="panel">
+    <div class="ph">One claim through the Gate</div>
+    <div class="quote">&ldquo;By <span class="u-code">2035</span>, we aim to cut Scope&nbsp;1 emissions from our processing facilities by <span class="u-code">60%</span>, using <span class="u-code">2015</span> as our baseline year, in line with the <span class="u-code">GHG Protocol</span> Corporate Standard.&rdquo;</div>
+    <div class="lamps">
+      <div class="lampbox">
+        <svg width="32" height="32" aria-hidden="true"><circle cx="16" cy="16" r="13" fill="#0F5D53"/><polyline points="9,16 14,21 23,11" fill="none" stroke="#F3F0E8" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="t">quantity</div></div>
+      <div class="lampbox">
+        <svg width="32" height="32" aria-hidden="true"><circle cx="16" cy="16" r="13" fill="#0F5D53"/><polyline points="9,16 14,21 23,11" fill="none" stroke="#F3F0E8" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="t">target year</div></div>
+      <div class="lampbox">
+        <svg width="32" height="32" aria-hidden="true"><circle cx="16" cy="16" r="13" fill="#0F5D53"/><polyline points="9,16 14,21 23,11" fill="none" stroke="#F3F0E8" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="t">baseline year</div></div>
+      <div class="lampbox">
+        <svg width="32" height="32" aria-hidden="true"><circle cx="16" cy="16" r="13" fill="#0F5D53"/><polyline points="9,16 14,21 23,11" fill="none" stroke="#F3F0E8" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <div class="t">named standard</div></div>
+      <div class="lampbox">
+        <svg width="32" height="32" aria-hidden="true"><circle cx="16" cy="16" r="12" fill="none" stroke="#A9591F" stroke-width="3" stroke-dasharray="5 4"/></svg>
+        <div class="t off">accountable party</div></div>
+      <div style="margin-left:2px"><div class="score">4 / 5</div>
+        <div class="tiny">Mostly Checkable</div></div>
+    </div>
+    <div class="small"><b>Generated:</b> &ldquo;&hellip; overseen by [Accountable Party].&rdquo;
+      &nbsp;<span style="color:var(--ink-2)">The rewrite is the model&rsquo;s. The 4/5 is not.</span></div>
+    <div class="tiny" style="margin-top:6px">Cobalt Ridge Mining Corp &mdash; invented company, tagged Simulated.<br>
+      The Gate scores the sentence, never the company.</div>
+  </div>
+
+  <!-- the miss -->
+  <div class="panel">
+    <div class="ph ph-model">Where the Gate is wrong</div>
+    <div class="quote">&ldquo;&hellip; working with our supply chain to <b>halve</b> embodied carbon in our products by the end of the decade.&rdquo;</div>
+    <div class="small" style="margin-top:11px">
+      <span class="amber"><b>quantity &rarr; dark. Score 0/5.</b></span>
+      &ldquo;halve&rdquo; is a word, not a numeral, and the probe reads numerals.</div>
+    <div class="tiny" style="margin-top:9px">
+      known_miss_words &middot; rules/climate.v1.json<br>
+      tests/test_probes.py::<br>&nbsp;&nbsp;test_quantity_misses_word_numbers_like_halve</div>
+    <div class="small" style="margin-top:9px">The miss is written into the pack&rsquo;s own parameters and
+      pinned by a passing test. <b>We publish it rather than tune it away.</b></div>
+  </div>
+
+</div>
+
+<!-- ============ LEGEND ============ -->
+<div class="legend">
+  <div class="tag"><svg class="sw" aria-hidden="true"><rect width="22" height="22" fill="#15191E"/></svg>
+    <div><b>Observed</b> &mdash; verbatim from a named public document, with URL and fetch time</div></div>
+  <div class="tag"><svg class="sw" aria-hidden="true"><rect width="22" height="22" fill="#0F5D53"/></svg>
+    <div><b>Rule</b> &mdash; computed by the engine from a named rule-pack clause</div></div>
+  <div class="tag"><svg class="sw" aria-hidden="true">
+      <rect width="22" height="22" fill="#F3F0E8" stroke="#4A535E" stroke-width="2"/>
+      <path d="M0 22 L22 0 M0 11 L11 0 M11 22 L22 11" stroke="#4A535E" stroke-width="2"/></svg>
+    <div><b>Simulated</b> &mdash; authored fixture, never a real company</div></div>
+  <div class="tag"><svg class="sw" aria-hidden="true">
+      <rect x="1" y="1" width="20" height="20" fill="none" stroke="#A9591F" stroke-width="3" stroke-dasharray="5 4"/></svg>
+    <div><b>Generated</b> &mdash; written by the model, never affects a score</div></div>
+  <div class="right">corpus: 4 Observed &middot; 4 Simulated &middot; 97 claims frozen</div>
+</div>
+
+<!-- ============ FOOTER ============ -->
+<div class="footer">
+  <div class="thesis">Checkability is a property of a sentence &mdash; so the middle of this
+    workflow is code, not a prompt. Switch the model off and not one verdict moves.</div>
+  <div class="facts">
+    <b>67</b> tests green &middot; <b>97</b> frozen claims &middot; <b>93</b> model explanations &middot; rule pack <b>v1.0.0</b><br>
+    self-agreement over 3 identical runs &mdash; single prompt <b>89/97 (91.8%)</b> &middot; this workflow <b>97/97 (100%)</b>
+  </div>
+</div>
+
 </body>
 </html>
