@@ -1,0 +1,1 @@
+{"pack_version": "test", "generated_at": "2026-08-24T00:00:00+00:00", "model_layer": "on", "model_provider": "featherless", "claim_source": "frozen", "claims": [{"claim_id": "fake-claim-1", "text": "fixture claim", "score": 3, "max_score": 5, "verdicts": {}, "explanation": "fixture explanation (on)"}], "documents": [], "corpus": {"num_claims": 1}}
