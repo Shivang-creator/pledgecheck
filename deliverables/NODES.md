@@ -27,7 +27,7 @@ N2, N3 and N4 are the middle, and the middle never opens a socket. Below, each n
 same six questions in the same order, and the second question is the one that actually matters.
 
 Every number quoted here was produced by a command that ran on the night of 23–24 August 2026.
-`./run.sh test` prints **67**, and every test named below exists in `tests/`.
+`./run.sh test` prints **81**, and every test named below exists in `tests/`.
 
 ---
 

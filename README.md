@@ -12,9 +12,11 @@ versioned rule-pack data — decides whether each claim names a quantity, a targ
 year, a named standard, and an accountable party. The gate never asks a model anything. Turn the
 model off entirely and every score, verdict and band stays byte-identical.
 
-**Status:** walking skeleton (T-01). Everything under `deliverables/` is watermarked `STUB` until
-its owning task upgrades it in place — see `.crew/BOARD.md` in the repo root for the task list and
-`.crew/LOG.md` for what has actually shipped so far tonight.
+**Status:** complete. `./run.sh test` prints **81**. The three track deliverables are
+`deliverables/flowchart.png` (the workflow poster), `deliverables/COMPARISON.md` (this workflow vs
+a single-prompt baseline over the same 97 frozen claims, run three times each) and
+`deliverables/NODES.md` (the reasoning behind each node). `deliverables/HONESTY.md` says what is
+real and what is authored.
 
 ## Requirements
 
