@@ -74,6 +74,16 @@ def probe_baseline_year(text: str, params: dict, lexicons: dict) -> ProbeResult:
     return _year_with_context(text, params)
 
 
+def _term_pattern(term: str) -> str:
+    """Build a regex for a lexicon term that matches any whitespace run (regular space,
+    non-breaking space, tab...) between its words, not only the literal ASCII space the
+    term happens to be authored with. Bug found writing tests/test_probes.py: a multi-word
+    lexicon term failed to match text scraped with a non-breaking space between two of its
+    words, because re.escape() on a plain space only matches that exact character.
+    See test_accountable_party_matches_across_nbsp_word_gap."""
+    return r"\s+".join(re.escape(word) for word in term.split())
+
+
 def _lexicon_search(text: str, params: dict, lexicons: dict) -> ProbeResult:
     lexicon_key = params["lexicon_key"]
     terms = lexicons.get(lexicon_key, [])
@@ -81,7 +91,7 @@ def _lexicon_search(text: str, params: dict, lexicons: dict) -> ProbeResult:
     # Longest term first so a full-name lexicon entry wins over its acronym when both
     # would match at the same position — cosmetic only, does not change presence.
     for term in sorted(terms, key=len, reverse=True):
-        m = re.search(re.escape(term), text, flags)
+        m = re.search(_term_pattern(term), text, flags)
         if m:
             return ProbeResult(True, (m.start(), m.end()), text[m.start():m.end()])
     return ProbeResult(False, None, None)

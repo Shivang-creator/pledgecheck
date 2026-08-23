@@ -16,7 +16,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import re
 import sys
 from datetime import datetime, timezone
@@ -28,6 +27,8 @@ sys.path.insert(0, str(ROOT))
 from core.engine import evaluate, load_pack  # noqa: E402
 from core.scoring import claim_id as compute_claim_id  # noqa: E402
 from core.scoring import corpus_rollup, per_document_rate  # noqa: E402
+from model.explain import DISABLED_PLACEHOLDER, explain_claims  # noqa: E402
+from model import provider as model_provider  # noqa: E402
 
 FROZEN_CLAIMS = ROOT / "corpus" / "claims.frozen.jsonl"
 DOCUMENTS = ROOT / "corpus" / "documents.json"
@@ -112,7 +113,15 @@ def load_claims() -> tuple[list[dict], str]:
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description="Run the Checkability Gate (Arm A).")
     parser.add_argument("--rules", default=str(DEFAULT_PACK), help="Path to a rule pack JSON.")
+    parser.add_argument(
+        "--out",
+        default=str(RESULTS),
+        help="Where to write the result JSON (default: deliverables/results.json). "
+        "T-09 uses this to write the 3 repeat runs to deliverables/runs/gate.run{1,2,3}.json "
+        "without disturbing the main deliverable.",
+    )
     args = parser.parse_args(argv)
+    out_path = Path(args.out)
 
     pack = load_pack(args.rules)
     claims, source_tier = load_claims()
@@ -143,24 +152,54 @@ def main(argv=None) -> int:
             }
         )
 
-    # No model call happens in this file at all yet (N5/explain lands in T-06). Every claim's
-    # score is pure code, so re-running always produces the same output regardless of this flag.
-    model_layer = "off" if os.environ.get("PLEDGECHECK_NO_MODEL") == "1" or not os.environ.get(
-        "GEMINI_API_KEY"
-    ) else "off"  # still "off": explain (N5) is not wired into this harness until T-06.
+    # N5 (T-06/T-integrator): for every claim the Gate could not fully verify, ask the
+    # model for the one-line rewrite that would make it checkable. explain_claims() owns
+    # the entire kill-switch decision internally (PLEDGECHECK_NO_MODEL, every provider's
+    # own key/config, and any real network/API failure from EVERY registered provider all
+    # collapse to the same DISABLED_PLACEHOLDER, logged loudly by model/provider.py and
+    # each provider it tried in turn) — nothing here re-implements or duplicates that
+    # check. Scores and verdicts above this line are already final; nothing below it may
+    # touch them. reset_providers_used() first so a previous run/test in this same
+    # process (e.g. tests/test_killswitch.py calling run_gate.main() repeatedly) never
+    # leaks provenance into this run's model_provider field.
+    model_provider.reset_providers_used()
+    failing_claims = [c for c in evaluated if c["score"] < c["max_score"]]
+    explanations = explain_claims(failing_claims) if failing_claims else {}
+    for c in evaluated:
+        if c["claim_id"] in explanations:
+            c["explanation"] = explanations[c["claim_id"]]
+
+    # model_layer reports what actually happened this run, not merely what was configured:
+    # "on" only if at least one explanation is real generated prose rather than the
+    # disabled placeholder. A configured-but-failing key (bad key, network down, retired
+    # model id) is honestly reported as "off", the same as an explicit kill switch — a
+    # dead API must degrade the label, never claim success it didn't have.
+    model_layer = "on" if any(v != DISABLED_PLACEHOLDER for v in explanations.values()) else "off"
+
+    # model_provider names WHICH provider(s) actually served this run's explanations —
+    # the fact a writeup needs to state truthfully. "none" covers the kill switch, an
+    # absent/bad key on every provider, and every provider genuinely failing, all alike;
+    # multiple names joined with "+" cover the (unlikely tonight, since Gemini's failure
+    # mode is a uniform-for-the-process daily quota) case of different batches being
+    # served by different providers within one run. See model/provider.py's docstring for
+    # what this signal does and doesn't promise (call-level, not claim-level, attribution).
+    served_by = sorted(model_provider.providers_used)
+    model_provider_field = "+".join(served_by) if served_by else "none"
 
     output = {
         "pack_version": pack["version"],
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "model_layer": model_layer,
+        "model_provider": model_provider_field,
         "claim_source": source_tier,
         "claims": evaluated,
         "documents": document_summaries,
         "corpus": corpus_rollup(evaluated, pack),
     }
 
-    RESULTS.write_text(json.dumps(output, indent=2) + "\n")
-    print(f"wrote {RESULTS} ({len(evaluated)} claims, source={source_tier})")
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    out_path.write_text(json.dumps(output, indent=2) + "\n")
+    print(f"wrote {out_path} ({len(evaluated)} claims, source={source_tier})")
     return 0
 
 

@@ -10,7 +10,16 @@ CMD="${1:-all}"
 if [ "$#" -gt 0 ]; then shift; fi
 
 run_test() {
-    python3 -m unittest discover -s tests -v "$@"
+    OUT_FILE="$(mktemp)"
+    STATUS=0
+    python3 -m unittest discover -s tests -v "$@" >"$OUT_FILE" 2>&1 || STATUS=$?
+    cat "$OUT_FILE"
+    COUNT="$(grep -o 'Ran [0-9]* test' "$OUT_FILE" | tail -1 | grep -o '[0-9]*')"
+    rm -f "$OUT_FILE"
+    if [ -n "$COUNT" ]; then
+        echo "TESTS: $COUNT"
+    fi
+    return "$STATUS"
 }
 
 run_gate() {

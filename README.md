@@ -20,8 +20,12 @@ its owning task upgrades it in place — see `.crew/BOARD.md` in the repo root f
 
 - Python **3.14** (stdlib only — no `pip install`, no venv, no `requirements.txt`)
 - Node (for rendering the flowchart PNG via headless Chromium — see below)
-- A `GEMINI_API_KEY` in `/Users/shivang/Projects/common-ground/.env.local` (only needed for the
-  model layer; everything else runs with `PLEDGECHECK_NO_MODEL=1` or no key at all)
+- Optionally, a model provider key — only needed for the model layer; everything else runs
+  with `PLEDGECHECK_NO_MODEL=1` or no key at all. Two providers are wired in, tried in order
+  (`model/provider.py`): `GEMINI_API_KEY` in `/Users/shivang/Projects/common-ground/.env.local`,
+  else `FEATHERLESS_API_KEY`/`FEATHERLESS_BASE_URL`/`FEATHERLESS_MODEL` in
+  `/Users/shivang/Projects/deadline-agent/.env.local`. Neither is required; the deterministic
+  Gate runs the same either way.
 
 ## Run it
 
@@ -54,7 +58,9 @@ core/        deterministic Checkability Gate — no model, no network, no framew
              tests/test_purity.py (an AST scan that fails the build on a forbidden import).
 rules/       versioned rule-pack data (climate.v1.json). Every clause carries a citation.
              core/ contains no domain literal — swap the pack, not the code.
-model/       the only place in the repo that opens a socket. Segments claims (N1) and
+model/       the only place in the repo that opens a socket. provider.py is the one public
+             entry point (a registry of interchangeable providers — gemini.py, then
+             featherless.py, then the deterministic fallback). Segments claims (N1) and
              writes the post-hoc rewrite (N5). Reads the score; can never change it.
 corpus/      source documents and the frozen claim set (corpus/claims.frozen.jsonl).
 harness/     run_gate (Arm A), run_baseline (Arm B), compare (pure arithmetic scoring
@@ -67,5 +73,7 @@ docs/        spot-check, labelling rubric, flowchart spec, baseline prompt — t
 
 ## Secrets
 
-Never committed. `.env*` is gitignored. `GEMINI_API_KEY` is read from
-`/Users/shivang/Projects/common-ground/.env.local` at call time, never hardcoded, never printed.
+Never committed. `.env*` is gitignored. `GEMINI_API_KEY` and the `FEATHERLESS_*` triplet are
+each read from their `.env.local` file at call time, never hardcoded, never printed. Each
+provider owns its own key resolution (`model/gemini.py`, `model/featherless.py`); nothing
+outside `model/` ever sees a key.
