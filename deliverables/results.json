@@ -1,19 +1,314 @@
 {
-  "pack_version": "0.0.1-STUB",
-  "generated_at": "2026-08-23T17:38:38.221963+00:00",
+  "pack_version": "1.0.0",
+  "generated_at": "2026-08-23T17:43:55.423685+00:00",
   "model_layer": "off",
+  "claim_source": "embedded-fallback",
   "claims": [
     {
-      "claim_id": "stub00000001",
-      "text": "STUB \u2014 real claims land after T-02/T-04/T-07.",
+      "claim_id": "7399cf81105a",
+      "text": "We will cut Scope 1 and Scope 2 emissions by 50% by 2030, compared to a 2019 baseline, in line with the GHG Protocol, overseen by our Audit Committee.",
+      "score": 5,
+      "max_score": 5,
+      "verdicts": [
+        {
+          "clause_id": "C1-QTY",
+          "probe": "quantity",
+          "present": true,
+          "span": [
+            45,
+            48
+          ],
+          "matched": "50%",
+          "citation": "GHG Protocol Corporate Standard (WRI/WBCSD, rev. ed.) ch.9 \u2014 a reduction target must be expressed as a quantified amount, not a qualitative direction."
+        },
+        {
+          "clause_id": "C2-TGTYR",
+          "probe": "target_year",
+          "present": true,
+          "span": [
+            52,
+            56
+          ],
+          "matched": "2030",
+          "citation": "Science Based Targets initiative (SBTi) Corporate Net-Zero Standard v1.2 \u00a74.2 \u2014 near-term and long-term targets must specify a target year."
+        },
+        {
+          "clause_id": "C3-BASEYR",
+          "probe": "baseline_year",
+          "present": true,
+          "span": [
+            72,
+            76
+          ],
+          "matched": "2019",
+          "citation": "GHG Protocol Corporate Standard (WRI/WBCSD, rev. ed.) ch.5 \u2014 a base year and base-year emissions must be established and disclosed for any reduction target to be verifiable."
+        },
+        {
+          "clause_id": "C4-STD",
+          "probe": "named_standard",
+          "present": true,
+          "span": [
+            104,
+            116
+          ],
+          "matched": "GHG Protocol",
+          "citation": "TCFD Recommendations (Task Force on Climate-related Financial Disclosures, 2017) \u2014 disclosures should name the accounting/reporting standard or scope framework used to measure the claim."
+        },
+        {
+          "clause_id": "C5-ACTOR",
+          "probe": "accountable_party",
+          "present": true,
+          "span": [
+            134,
+            149
+          ],
+          "matched": "Audit Committee",
+          "citation": "ISSB IFRS S2 (Climate-related Disclosures, 2023) \u00a76 \u2014 governance disclosures require identifying the body or role accountable for climate-related targets."
+        }
+      ],
+      "pack_version": "1.0.0",
+      "doc_id": "fallback-0",
+      "org": "Fixture Corp (T-04 bring-up fixture, not the real corpus)",
+      "provenance": "Simulated"
+    },
+    {
+      "claim_id": "ba7d0ba7ad78",
+      "text": "We are committed to a greener future for everyone.",
       "score": 0,
       "max_score": 5,
-      "verdicts": [],
-      "pack_version": "0.0.1-STUB"
+      "verdicts": [
+        {
+          "clause_id": "C1-QTY",
+          "probe": "quantity",
+          "present": false,
+          "span": null,
+          "matched": null,
+          "citation": "GHG Protocol Corporate Standard (WRI/WBCSD, rev. ed.) ch.9 \u2014 a reduction target must be expressed as a quantified amount, not a qualitative direction."
+        },
+        {
+          "clause_id": "C2-TGTYR",
+          "probe": "target_year",
+          "present": false,
+          "span": null,
+          "matched": null,
+          "citation": "Science Based Targets initiative (SBTi) Corporate Net-Zero Standard v1.2 \u00a74.2 \u2014 near-term and long-term targets must specify a target year."
+        },
+        {
+          "clause_id": "C3-BASEYR",
+          "probe": "baseline_year",
+          "present": false,
+          "span": null,
+          "matched": null,
+          "citation": "GHG Protocol Corporate Standard (WRI/WBCSD, rev. ed.) ch.5 \u2014 a base year and base-year emissions must be established and disclosed for any reduction target to be verifiable."
+        },
+        {
+          "clause_id": "C4-STD",
+          "probe": "named_standard",
+          "present": false,
+          "span": null,
+          "matched": null,
+          "citation": "TCFD Recommendations (Task Force on Climate-related Financial Disclosures, 2017) \u2014 disclosures should name the accounting/reporting standard or scope framework used to measure the claim."
+        },
+        {
+          "clause_id": "C5-ACTOR",
+          "probe": "accountable_party",
+          "present": false,
+          "span": null,
+          "matched": null,
+          "citation": "ISSB IFRS S2 (Climate-related Disclosures, 2023) \u00a76 \u2014 governance disclosures require identifying the body or role accountable for climate-related targets."
+        }
+      ],
+      "pack_version": "1.0.0",
+      "doc_id": "fallback-0",
+      "org": "Fixture Corp (T-04 bring-up fixture, not the real corpus)",
+      "provenance": "Simulated"
+    },
+    {
+      "claim_id": "c46e8b15f631",
+      "text": "The Chief Sustainability Officer will oversee a 30% reduction in water use by 2028 against a 2020 baseline.",
+      "score": 4,
+      "max_score": 5,
+      "verdicts": [
+        {
+          "clause_id": "C1-QTY",
+          "probe": "quantity",
+          "present": true,
+          "span": [
+            48,
+            51
+          ],
+          "matched": "30%",
+          "citation": "GHG Protocol Corporate Standard (WRI/WBCSD, rev. ed.) ch.9 \u2014 a reduction target must be expressed as a quantified amount, not a qualitative direction."
+        },
+        {
+          "clause_id": "C2-TGTYR",
+          "probe": "target_year",
+          "present": true,
+          "span": [
+            78,
+            82
+          ],
+          "matched": "2028",
+          "citation": "Science Based Targets initiative (SBTi) Corporate Net-Zero Standard v1.2 \u00a74.2 \u2014 near-term and long-term targets must specify a target year."
+        },
+        {
+          "clause_id": "C3-BASEYR",
+          "probe": "baseline_year",
+          "present": true,
+          "span": [
+            93,
+            97
+          ],
+          "matched": "2020",
+          "citation": "GHG Protocol Corporate Standard (WRI/WBCSD, rev. ed.) ch.5 \u2014 a base year and base-year emissions must be established and disclosed for any reduction target to be verifiable."
+        },
+        {
+          "clause_id": "C4-STD",
+          "probe": "named_standard",
+          "present": false,
+          "span": null,
+          "matched": null,
+          "citation": "TCFD Recommendations (Task Force on Climate-related Financial Disclosures, 2017) \u2014 disclosures should name the accounting/reporting standard or scope framework used to measure the claim."
+        },
+        {
+          "clause_id": "C5-ACTOR",
+          "probe": "accountable_party",
+          "present": true,
+          "span": [
+            4,
+            32
+          ],
+          "matched": "Chief Sustainability Officer",
+          "citation": "ISSB IFRS S2 (Climate-related Disclosures, 2023) \u00a76 \u2014 governance disclosures require identifying the body or role accountable for climate-related targets."
+        }
+      ],
+      "pack_version": "1.0.0",
+      "doc_id": "fallback-0",
+      "org": "Fixture Corp (T-04 bring-up fixture, not the real corpus)",
+      "provenance": "Simulated"
+    },
+    {
+      "claim_id": "8c5278a5d2f5",
+      "text": "We aim to do better every year.",
+      "score": 0,
+      "max_score": 5,
+      "verdicts": [
+        {
+          "clause_id": "C1-QTY",
+          "probe": "quantity",
+          "present": false,
+          "span": null,
+          "matched": null,
+          "citation": "GHG Protocol Corporate Standard (WRI/WBCSD, rev. ed.) ch.9 \u2014 a reduction target must be expressed as a quantified amount, not a qualitative direction."
+        },
+        {
+          "clause_id": "C2-TGTYR",
+          "probe": "target_year",
+          "present": false,
+          "span": null,
+          "matched": null,
+          "citation": "Science Based Targets initiative (SBTi) Corporate Net-Zero Standard v1.2 \u00a74.2 \u2014 near-term and long-term targets must specify a target year."
+        },
+        {
+          "clause_id": "C3-BASEYR",
+          "probe": "baseline_year",
+          "present": false,
+          "span": null,
+          "matched": null,
+          "citation": "GHG Protocol Corporate Standard (WRI/WBCSD, rev. ed.) ch.5 \u2014 a base year and base-year emissions must be established and disclosed for any reduction target to be verifiable."
+        },
+        {
+          "clause_id": "C4-STD",
+          "probe": "named_standard",
+          "present": false,
+          "span": null,
+          "matched": null,
+          "citation": "TCFD Recommendations (Task Force on Climate-related Financial Disclosures, 2017) \u2014 disclosures should name the accounting/reporting standard or scope framework used to measure the claim."
+        },
+        {
+          "clause_id": "C5-ACTOR",
+          "probe": "accountable_party",
+          "present": false,
+          "span": null,
+          "matched": null,
+          "citation": "ISSB IFRS S2 (Climate-related Disclosures, 2023) \u00a76 \u2014 governance disclosures require identifying the body or role accountable for climate-related targets."
+        }
+      ],
+      "pack_version": "1.0.0",
+      "doc_id": "fallback-0",
+      "org": "Fixture Corp (T-04 bring-up fixture, not the real corpus)",
+      "provenance": "Simulated"
+    },
+    {
+      "claim_id": "9cb1aa8efe06",
+      "text": "Our target is to halve emissions by the end of the decade.",
+      "score": 0,
+      "max_score": 5,
+      "verdicts": [
+        {
+          "clause_id": "C1-QTY",
+          "probe": "quantity",
+          "present": false,
+          "span": null,
+          "matched": null,
+          "citation": "GHG Protocol Corporate Standard (WRI/WBCSD, rev. ed.) ch.9 \u2014 a reduction target must be expressed as a quantified amount, not a qualitative direction."
+        },
+        {
+          "clause_id": "C2-TGTYR",
+          "probe": "target_year",
+          "present": false,
+          "span": null,
+          "matched": null,
+          "citation": "Science Based Targets initiative (SBTi) Corporate Net-Zero Standard v1.2 \u00a74.2 \u2014 near-term and long-term targets must specify a target year."
+        },
+        {
+          "clause_id": "C3-BASEYR",
+          "probe": "baseline_year",
+          "present": false,
+          "span": null,
+          "matched": null,
+          "citation": "GHG Protocol Corporate Standard (WRI/WBCSD, rev. ed.) ch.5 \u2014 a base year and base-year emissions must be established and disclosed for any reduction target to be verifiable."
+        },
+        {
+          "clause_id": "C4-STD",
+          "probe": "named_standard",
+          "present": false,
+          "span": null,
+          "matched": null,
+          "citation": "TCFD Recommendations (Task Force on Climate-related Financial Disclosures, 2017) \u2014 disclosures should name the accounting/reporting standard or scope framework used to measure the claim."
+        },
+        {
+          "clause_id": "C5-ACTOR",
+          "probe": "accountable_party",
+          "present": false,
+          "span": null,
+          "matched": null,
+          "citation": "ISSB IFRS S2 (Climate-related Disclosures, 2023) \u00a76 \u2014 governance disclosures require identifying the body or role accountable for climate-related targets."
+        }
+      ],
+      "pack_version": "1.0.0",
+      "doc_id": "fallback-0",
+      "org": "Fixture Corp (T-04 bring-up fixture, not the real corpus)",
+      "provenance": "Simulated"
     }
   ],
-  "documents": [],
+  "documents": [
+    {
+      "doc_id": "fallback-0",
+      "org": "Fixture Corp (T-04 bring-up fixture, not the real corpus)",
+      "provenance": "Simulated",
+      "num_claims": 5,
+      "checkability_rate": 0.36
+    }
+  ],
   "corpus": {
-    "note": "STUB"
+    "num_claims": 5,
+    "mean_score": 1.8,
+    "checkability_rate": 0.36,
+    "band_distribution": {
+      "Fully Checkable": 1,
+      "Unverifiable": 3,
+      "Mostly Checkable": 1
+    }
   }
 }

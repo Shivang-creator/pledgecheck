@@ -1,8 +1,102 @@
 {
   "pack_id": "climate",
-  "version": "0.0.1-STUB",
-  "domain": "STUB — real pack lands in T-03",
-  "probes": [],
-  "bands": [],
-  "lexicons": {}
+  "version": "1.0.0",
+  "domain": "corporate climate pledges",
+  "description": "Five checkability probes for a claim sentence extracted from a corporate climate/sustainability pledge or report. Each probe asks whether one auditable element is present in the sentence text; none asks whether the claim is true or sincere.",
+  "probes": [
+    {
+      "clause_id": "C1-QTY",
+      "probe": "quantity",
+      "weight": 1,
+      "citation": "GHG Protocol Corporate Standard (WRI/WBCSD, rev. ed.) ch.9 — a reduction target must be expressed as a quantified amount, not a qualitative direction.",
+      "params": {
+        "regexes": [
+          "\\d+(?:\\.\\d+)?\\s?%",
+          "\\d+(?:\\.\\d+)?\\s?(?:percent|per cent|percentage points)",
+          "\\d+(?:\\.\\d+)?\\s?(?:million|billion|thousand)?\\s?(?:tonnes?|tons?|metric tons?|Mt|MtCO2e?|kt|ktCO2e?|kg|kgCO2e?)",
+          "\\d+(?:\\.\\d+)?\\s?(?:GW|MW|kWh|MWh|GWh|TWh)"
+        ],
+        "known_miss_words": [
+          "halve", "halved", "halving", "double", "doubled", "doubling",
+          "triple", "tripled", "net-zero", "net zero", "carbon neutral"
+        ]
+      }
+    },
+    {
+      "clause_id": "C2-TGTYR",
+      "probe": "target_year",
+      "weight": 1,
+      "citation": "Science Based Targets initiative (SBTi) Corporate Net-Zero Standard v1.2 §4.2 — near-term and long-term targets must specify a target year.",
+      "params": {
+        "year_regex": "(?:19|20)\\d{2}",
+        "min_year": 2020,
+        "max_year": 2100,
+        "context_window_chars": 60,
+        "context_words": [
+          "by", "target", "targets", "goal", "aim", "aims", "achieve",
+          "achieving", "no later than", "before", "committed to",
+          "commitment by", "deadline of", "end of"
+        ]
+      }
+    },
+    {
+      "clause_id": "C3-BASEYR",
+      "probe": "baseline_year",
+      "weight": 1,
+      "citation": "GHG Protocol Corporate Standard (WRI/WBCSD, rev. ed.) ch.5 — a base year and base-year emissions must be established and disclosed for any reduction target to be verifiable.",
+      "params": {
+        "year_regex": "(?:19|20)\\d{2}",
+        "min_year": 1990,
+        "max_year": 2024,
+        "context_window_chars": 60,
+        "context_words": [
+          "baseline year", "base year", "baseline of", "base of",
+          "relative to", "compared to", "against a", "versus", "vs.",
+          "from a", "since"
+        ]
+      }
+    },
+    {
+      "clause_id": "C4-STD",
+      "probe": "named_standard",
+      "weight": 1,
+      "citation": "TCFD Recommendations (Task Force on Climate-related Financial Disclosures, 2017) — disclosures should name the accounting/reporting standard or scope framework used to measure the claim.",
+      "params": {
+        "lexicon_key": "standards",
+        "case_insensitive": true
+      }
+    },
+    {
+      "clause_id": "C5-ACTOR",
+      "probe": "accountable_party",
+      "weight": 1,
+      "citation": "ISSB IFRS S2 (Climate-related Disclosures, 2023) §6 — governance disclosures require identifying the body or role accountable for climate-related targets.",
+      "params": {
+        "lexicon_key": "actors",
+        "case_insensitive": true
+      }
+    }
+  ],
+  "bands": [
+    {"min": 0, "max": 1, "label": "Unverifiable", "description": "Aspirational language with no auditable component; a reader has nothing to check."},
+    {"min": 2, "max": 2, "label": "Weak", "description": "One auditable element present; the rest of the claim cannot be checked without contacting the company."},
+    {"min": 3, "max": 3, "label": "Partial", "description": "About half the auditable elements present; enough to start checking, not enough to finish."},
+    {"min": 4, "max": 4, "label": "Mostly Checkable", "description": "Nearly every auditable element present; one gap remains."},
+    {"min": 5, "max": 5, "label": "Fully Checkable", "description": "All five auditable elements present; the claim can be independently verified against public data."}
+  ],
+  "lexicons": {
+    "standards": [
+      "GHG Protocol", "Scope 1", "Scope 2", "Scope 3", "SBTi",
+      "Science Based Targets", "Science Based Targets initiative",
+      "ISO 14064", "CDP", "TCFD", "ISSB", "CSRD", "IFRS S2",
+      "Corporate Net-Zero Standard", "PAS 2060"
+    ],
+    "actors": [
+      "board", "board of directors", "the board", "CEO", "chief executive officer",
+      "chief sustainability officer", "CSO", "chief financial officer", "CFO",
+      "audit committee", "sustainability committee", "executive leadership team",
+      "executive committee", "management team", "senior management",
+      "head of sustainability", "sustainability officer", "shareholders"
+    ]
+  }
 }
