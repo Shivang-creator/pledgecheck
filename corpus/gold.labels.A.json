@@ -1,0 +1,482 @@
+{
+  "4b035fd3a749": {
+    "quantity": false,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": false,
+    "note": "'net zero' is a goal-state term (S2 exclusion), not a magnitude. 'the world' / 'those of us who can afford to' are generic collectives (S6 exclusion), not named parties."
+  },
+  "de3a2762fbf4": {
+    "quantity": false,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": true,
+    "note": "accountable_party TRUE via the possessive 'Microsoft's carbon footprint' (S6 counts: possessive naming the party the claim is about). 'today' is not a year."
+  },
+  "11c31341167b": {
+    "quantity": false,
+    "target_year": true,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": true,
+    "note": "'By 2030' is an explicit forward due date. 'carbon negative' is a goal state, not a magnitude. Microsoft is the named main-clause subject (S6's own TRUE worked-example pattern)."
+  },
+  "418e7ea6ab02": {
+    "quantity": false,
+    "target_year": true,
+    "baseline_year": true,
+    "named_standard": false,
+    "accountable_party": true,
+    "note": "2050 = target year. 1975: applying the rubric's own pre-resolved 'anchoring reading' for cumulative-since-founding claims (S4 flagged ambiguity) -> baseline_year TRUE. 'all the carbon' is a totality, not a stated magnitude. Microsoft named subject."
+  },
+  "5a897608855e": {
+    "quantity": false,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": false,
+    "note": "S2's own FALSE-adjacent case: 'a bold goal ... a detailed plan' is purely qualitative. Agent is 'we', unnamed."
+  },
+  "ed45cc49608c": {
+    "quantity": true,
+    "target_year": true,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": false,
+    "note": "'more than half' is a word-expressed definite proportion (S2 counts). 'by 2030' is a genuine forward target. No baseline year stated. Agent is 'we' throughout -- possessive 'our carbon emissions' does not rescue a bare pronoun (S6 exclusion)."
+  },
+  "280e8280df99": {
+    "quantity": false,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": false,
+    "note": "2012 dates the start of an internal fee (S3/S4 'historical start' exclusion, not a target or baseline). 'last year' has no explicit numeral. Agent is 'we'."
+  },
+  "e08ce3b8ec4e": {
+    "quantity": false,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": true,
+    "note": "accountable_party TRUE via the attributive 'Microsoft technology' (same possessive/attributive-naming pattern as claim 2). Borderline: the naming is incidental to the sentence's grammar rather than a designation of primary responsibility -- flagged."
+  },
+  "905bdf32e595": {
+    "quantity": true,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": false,
+    "note": "'$1 billion' is a monetary magnitude (S2 counts). The fund is an internal vehicle, not an external standard (S5 exclusion). Agent is 'we'."
+  },
+  "8ed8a1e5d7af": {
+    "quantity": false,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": false,
+    "note": "'Beginning next year' is a relative deadline with no year stated -- the textbook target_year miss (S3 exclusion). Agent is 'we'."
+  },
+  "dd8f90f506fa": {
+    "quantity": false,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": false,
+    "note": "'annual' is a cadence, not a year. 'Environmental Sustainability Report' is a first-party document (S5 exclusion). Agent is 'our'."
+  },
+  "fd01ad9c701d": {
+    "quantity": false,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": false,
+    "note": "Section-heading fragment (see docs/SPOT-CHECK.md). No subject named, all five false."
+  },
+  "b83442e4621e": {
+    "quantity": true,
+    "target_year": true,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": false,
+    "note": "'more than half' plus 'by 2030'. Agent is 'we' throughout. 'each year' is a cadence, not a target year."
+  },
+  "b39f174fadfb": {
+    "quantity": false,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": false,
+    "note": "Section-heading fragment. All five false."
+  },
+  "e7cba651524f": {
+    "quantity": true,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": false,
+    "note": "'$1 billion' magnitude. 'Climate Innovation Fund' is capitalised but still an internal programme, not an external standard (S5 exclusion). Agent is 'we'."
+  },
+  "d2c34c8c177d": {
+    "quantity": false,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": false,
+    "note": "Section-heading fragment. All five false."
+  },
+  "d0737a78d272": {
+    "quantity": false,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": false,
+    "note": "Rubric's own S5 worked example (FALSE): 'strong global reporting standards' names no standard. Report is first-party. Agent is 'we'."
+  },
+  "8bded97454cd": {
+    "quantity": false,
+    "target_year": true,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": true,
+    "note": "'by 2030' is the target year. 'carbon neutral' is a goal state, not a magnitude. This is literally the rubric's own S6 TRUE worked example ('Apple today unveiled its plan...')."
+  },
+  "94810734d42f": {
+    "quantity": false,
+    "target_year": true,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": true,
+    "note": "'by 2030' target year. accountable_party TRUE via the attributive 'every Apple device sold', even though the first clause's subject is the unnamed 'The company' (S6 attributive-counts rule)."
+  },
+  "b4fbd4bfc7ee": {
+    "quantity": false,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": true,
+    "note": "Apple named main-clause subject. No number, year, or standard -- a roadmap claim with nothing to check against."
+  },
+  "d0404162d844": {
+    "quantity": true,
+    "target_year": true,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": true,
+    "note": "'75 percent' and '25 percent' are magnitudes; 'by 2030' is the target. '2020' in '2020 Environmental Progress Report' is a document-title year (S3 exclusion) and contributes to neither year field; the report is first-party so not a named standard. Apple named subject."
+  },
+  "92f36596f943": {
+    "quantity": false,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": true,
+    "note": "Apple named subject. 'as energy efficient as possible' is an unbounded aspiration, no magnitude."
+  },
+  "e2e000e5964b": {
+    "quantity": true,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": true,
+    "note": "'4.3 million metric tons' is a magnitude, but 2019 is the year the reduction happened, not a year by which anything is promised -- retrospective claims have no target year (S3 exclusion, matches the rubric's own worked example almost verbatim). Apple named subject."
+  },
+  "80dbd4c139a8": {
+    "quantity": true,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": true,
+    "note": "'73 percent' and the duration '11 years' both count as quantities (S2 explicitly lists durations). 'Over the past 11 years' names no specific year, so baseline_year is false despite the real comparison (S4 exclusion). Apple named subject."
+  },
+  "cd779ecca62a": {
+    "quantity": false,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": true,
+    "note": "Apple named subject only. Directional language, no magnitude or deadline."
+  },
+  "3972fd81a5ae": {
+    "quantity": true,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": true,
+    "note": "'92' and 'over 779,000 annualized metric tons' are magnitudes. 2019 is a performance year, not a target. 'Supplier Energy Efficiency Program' is an internal programme (S5 exclusion). accountable_party TRUE via the possessive 'Apple's Supplier Energy Efficiency Program'."
+  },
+  "dd6311f921cd": {
+    "quantity": true,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": true,
+    "note": "Three magnitudes: '6.4 million square feet', 'nearly one-fifth' (word-expressed proportion), '$27 million'. 'Last year' is relative and yields no year on either field. Apple named subject."
+  },
+  "5190a389655a": {
+    "quantity": true,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": true,
+    "note": "'100 percent' magnitude. A maintenance commitment with no deadline -- no target year. Apple named subject."
+  },
+  "7ac34455d9a3": {
+    "quantity": true,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": true,
+    "note": "'over 70 suppliers', '100 percent', 'nearly 8 gigawatts'. No year in any role. Apple named subject ('Apple now has commitments...')."
+  },
+  "02e6ce4bd045": {
+    "quantity": true,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": false,
+    "note": "'14.3 million metric tons' and 'more than 3 million cars' are magnitudes. 'Once completed' is a conditional deadline naming no year (S3 exclusion). No named party in THIS sentence -- the subject is 'these commitments' (per S1 Principle 2, isolation: the antecedent Apple in a neighbouring claim is not evidence for this one)."
+  },
+  "9e6fe1896740": {
+    "quantity": false,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": true,
+    "note": "'at scale' is vague magnitude language (S2 exclusion), not a quantity. Nike named main-clause subject -- literally the rubric's second S6 TRUE worked example ('Nike is relentlessly innovating...')."
+  },
+  "cab9279cadc9": {
+    "quantity": true,
+    "target_year": false,
+    "baseline_year": true,
+    "named_standard": false,
+    "accountable_party": true,
+    "note": "'Sixty-nine percent' spelled out still counts (S2). FY20 is explicitly a baseline; FY24 is the performance year of an achieved result, not a target year (S3 exclusion). 'Scope 1 and Scope 2' does not name the GHG Protocol itself, so named_standard is false (S5 exclusion, applied without exception per the rubric). accountable_party TRUE via 'Nike Operations'."
+  },
+  "11e64368bcac": {
+    "quantity": true,
+    "target_year": false,
+    "baseline_year": true,
+    "named_standard": false,
+    "accountable_party": true,
+    "note": "Same shape as the Scope 1+2 line: '36%' spelled-out magnitude, explicit FY20 baseline, FY24 performance year not target, Scope 3 does not name a standard, 'Nike's manufacturing' names the party."
+  },
+  "b6ad161327d5": {
+    "quantity": true,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": true,
+    "note": "'Ninety-six percent' spelled out. FY24 is a performance year; no baseline named here -- this is a share of consumption, not a reduction from a reference year. 'Nike's global operations' names the party."
+  },
+  "91c46e653f68": {
+    "quantity": true,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": true,
+    "note": "'One hundred percent' and 'over 60 percent'. accountable_party TRUE via 'Nike's strategic finished goods suppliers' -- the suppliers are unnamed but Nike is named as the responsible principal."
+  },
+  "7a038e1e960f": {
+    "quantity": true,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": true,
+    "note": "'Less than 1 percent' is a bounded comparative around a stated figure (S2 counts). accountable_party TRUE via the attributive 'Nike goods'; borderline, since the sentence is otherwise passive voice with no agent."
+  },
+  "0e7c94a0966b": {
+    "quantity": true,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": true,
+    "note": "'more than 40 percent' magnitude (plus the duration 'past decade' independently counting per S2). 'Over the past decade' names no year, so no baseline year despite the implied comparison (S4 exclusion). 'Nike's material manufacturing suppliers' names the party."
+  },
+  "f18b4995a2e3": {
+    "quantity": false,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": true,
+    "note": "NIKE named subject only. 'sustainable innovation at scale' has no magnitude, deadline or standard."
+  },
+  "08dbbe466933": {
+    "quantity": false,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": false,
+    "note": "'Dri-FIT' and 'ReactX' are product brands, explicitly excluded from named_standard (S5). Agent is 'we' -- the brand names do not name the accountable org."
+  },
+  "f41bfc3b253b": {
+    "quantity": false,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": false,
+    "note": "Pure brand copy. Agent is 'we'. All five false."
+  },
+  "9a9d8df6907b": {
+    "quantity": false,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": false,
+    "note": "'thousands of suppliers' and 'millions of athletes' are indefinite plurals with no figure and explicitly do NOT count as quantities (S2 exclusion) -- this field's most likely false-positive trap in the corpus. Agent is 'we'."
+  },
+  "976953bb32a8": {
+    "quantity": false,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": false,
+    "note": "Directional language only. Agent is 'we'. All five false."
+  },
+  "485794fecb75": {
+    "quantity": false,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": true,
+    "note": "accountable_party TRUE, flagged as a borderline call: 'as only NIKE can' names NIKE explicitly as the (elided) subject of the comparison clause, even though the sentence's main subject is 'We'. A stricter reading limited to genuine main-clause subjects would score this false."
+  },
+  "60de6d8d6699": {
+    "quantity": false,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": true,
+    "note": "accountable_party TRUE via the possessive 'Patagonia's business'. A framing sentence with no measurable content otherwise."
+  },
+  "6b7e3bcfce48": {
+    "quantity": false,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": false,
+    "note": "Rubric's own S2-adjacent FALSE pattern: 'radically' is an intensifier, not a magnitude. Agent is 'we'."
+  },
+  "df0d8d5ad2cd": {
+    "quantity": false,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": false,
+    "note": "'double down' is idiomatic and explicitly excluded from quantity (S2). Agent is 'we'. All five false."
+  },
+  "c8fa7092f823": {
+    "quantity": false,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": false,
+    "note": "'government and industry' is a generic collective (S6 exclusion), not a named party, and is not even this claim's own agent regardless. Agent is 'we'."
+  },
+  "69160a0d1479": {
+    "quantity": false,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": false,
+    "note": "'carbon neutral' is a goal-state term, not a magnitude (S2 exclusion). Subject of the main clause is 'Purchasing offsets', not a named party."
+  },
+  "4ac470779eb9": {
+    "quantity": false,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": false,
+    "note": "Counterfactual framing ('If our goal was...'). Agent is 'our'/'we'. Nothing checkable."
+  },
+  "db7eca8182c3": {
+    "quantity": true,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": false,
+    "note": "'nearly 99%' is a stated magnitude (S2 counts a bounded comparative around a figure). 'the bulk of' alone would not have counted (S2 exclusion). Agent is 'our', unnamed."
+  },
+  "a9b067c0f5e5": {
+    "quantity": false,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": false,
+    "note": "Five words, zero checkable content. Agent is 'We', unnamed -- no named role or governance body given despite the responsibility language."
+  },
+  "711fa04baf9f": {
+    "quantity": false,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": true,
+    "accountable_party": false,
+    "note": "SBTi is named in full and abbreviated -- named_standard TRUE, literally the rubric's own S5 TRUE worked example. accountable_party FALSE per the rubric's own explicit S6 subordinate-role exclusion, which quotes this near-identical sentence: SBTi is named but is not the party who set the goals; the agent is an unnamed 'We'."
+  },
+  "3a626d846b9d": {
+    "quantity": true,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": true,
+    "accountable_party": true,
+    "note": "'1.5 degrees Celsius' is a magnitude with a unit (S2 counts). SBTi and the Paris Agreement are both named (S5). '2015' is part of the proper name 'the 2015 Paris Agreement' and is neither a target nor a baseline year (S3/S4 exclusion). accountable_party: 'SBTi' is the main-clause subject of this sentence ('SBTi has a robust ... process...') -- applying the rubric's own pre-resolved S6 flagged-ambiguity rule (named third party as main-clause subject of a descriptive sentence scores TRUE, applied mechanically) -> TRUE."
+  },
+  "308414adde94": {
+    "quantity": true,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": true,
+    "accountable_party": true,
+    "note": "This is the rubric's own quoted example sentence for the S6 flagged ambiguity. 'three' is a spelled-out count and is explicitly listed as a quantity example in S2, even though it counts scopes in a definitional aside rather than measuring anything pledged -- counted per the rubric's literal text. SBTi named (S5 TRUE). accountable_party TRUE: SBTi is the named main-clause subject, per the rubric's own explicit resolution of this exact sentence."
+  },
+  "e1e552050909": {
+    "quantity": true,
+    "target_year": true,
+    "baseline_year": true,
+    "named_standard": false,
+    "accountable_party": false,
+    "note": "Fully checkable on four of five: '80%' (quantity), 'FY2030' (target year), 'FY2017' (baseline year). 'Scope 1 and Scope 2' does not name the GHG Protocol -- named_standard FALSE. accountable_party FALSE: headless imperative fragment with no subject (S6 exclusion, the rubric's own quoted example for this exclusion is the near-identical Scope 3 line at claim 56)."
+  },
+  "6b870f1e9e0e": {
+    "quantity": true,
+    "target_year": true,
+    "baseline_year": true,
+    "named_standard": false,
+    "accountable_party": false,
+    "note": "This is the rubric's own directly-quoted example of a headless target fragment (S6). '55%' quantity, 'FY2030' target year, 'FY2017' baseline year, Scope 3 not a named standard, no subject so accountable_party FALSE."
+  },
+  "d768f1626c96": {
+    "quantity": true,
+    "target_year": true,
+    "baseline_year": true,
+    "named_standard": false,
+    "accountable_party": false,
+    "note": "This is the rubric's own S3 TRUE worked example claim in full. '90%' quantity, 'FY2040' target year (worked example), 'FY2017' baseline year (same worked example), Scope 1/2/3 not a named standard, headless fragment so no party."
+  },
+  "cc74b24a05ca": {
+    "quantity": false,
+    "target_year": true,
+    "baseline_year": true,
+    "named_standard": false,
+    "accountable_party": false,
+    "note": "'net-zero' is a goal-state term, not a stated magnitude (S2 exclusion) -- deliberately scored the same way as 'carbon negative' in the Microsoft document (claim 3). Both year fields true (FY2040 target, FY2017 baseline). 'GHG emissions' names the substance measured, not the GHG Protocol itself -- named_standard FALSE. Headless imperative ('Commit to reach...'), no subject, so accountable_party FALSE."
+  },
+  "790fd28f0def": {
+    "quantity": true,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": true,
+    "note": "'1.5 degrees Celsius' magnitude, same reasoning as claim 53. 'the latest science' / 'the most robust targets' are unnamed gestures at standards (S5 exclusion) -- no named_standard in THIS sentence (unlike claim 53, neither SBTi nor Paris Agreement is named here). accountable_party TRUE: 'Patagonia is committed to adapting...' names Patagonia as the agent of the second clause, even though the first clause's subject is the unnamed 'We'."
+  },
+  "d6bd138d8e25": {
+    "quantity": false,
+    "target_year": false,
+    "baseline_year": false,
+    "named_standard": false,
+    "accountable_party": false,
+    "note": "A hedge about future target language. 'absolute greenhouse gas emissions' names the metric but attaches no figure, year, standard or party. Agent is 'our', unnamed."
+  }
+}
