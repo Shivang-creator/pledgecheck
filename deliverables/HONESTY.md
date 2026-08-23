@@ -35,3 +35,16 @@ coverage. Three open probe defects are disclosed in `COMPARISON.md` and on the p
 fixed quietly: `Scope 1/2/3` matched as a named standard (R-01), `quantity` blind to plain digit
 magnitudes such as "$1 billion" (R-02), and `baseline_year` blind to two-digit fiscal years such as
 `FY20` (R-04). The word-number miss ("halve") is deliberate and is pinned by a passing test.
+
+One more boundary belongs in this file, because it is designed rather than broken and a reader will
+find it in about thirty seconds. The Gate has no pledge-detector and no negation handling. "The board
+has decided NOT to cut emissions by 50% by 2030 from our 2010 baseline, contrary to the GHG Protocol
+Corporate Standard." scores **4/5, Mostly Checkable**, with the same verdicts as the identical
+sentence without the "NOT", and a recipe built from the same tokens scores 4/5 as well. That is what
+the **Rule** tag actually means here: the engine reports whether a sentence states the elements a
+named clause requires, not whether the sentence is true and not whether it is a promise at all. Five
+tests pin the boundary, one per probe (`test_quantity_negation_still_counts_as_present` and its four
+siblings), and `tests/test_probes.py` says why in its own docstring: "the probe checks whether a
+number is stated, not whether the claim is honest." Empty input, whitespace and 10 KB of junk all
+score 0/5 Unverifiable, so there is no false confidence at the bottom of the range. What that leaves
+undone is honest to say: reading the word "not" is still the reader's job.

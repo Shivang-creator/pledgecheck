@@ -168,6 +168,26 @@ units and nothing else. That one is not deliberate, it is a gap, and it is open.
 not themselves a named standard. That is five false positives on the labelled slice and it is open
 too. Both are written up in `deliverables/COMPARISON.md` rather than fixed quietly at 3am.
 
+**What the Gate does not read, by design.** It has no pledge-detector and no negation handling. Run
+`The board has decided NOT to cut emissions by 50% by 2030 from our 2010 baseline, contrary to the
+GHG Protocol Corporate Standard.` through the shipped pack and it scores **4/5, Mostly Checkable**,
+with a verdict array identical to the same sentence with the "NOT" taken out: C1-QTY, C2-TGTYR,
+C4-STD and C5-ACTOR present, C3-BASEYR absent, in both. A recipe carrying the same tokens ("Preheat
+the oven to 2030 degrees, add 50% of the CEO, rest since 2010, per the GHG Protocol") also scores
+4/5. That is the right answer for this node, not a bug we missed. N3 asks whether a sentence states
+the elements an auditor would need in order to go and check it, and a sentence saying a company will
+*not* do something is exactly as checkable as one saying it will: you can go and verify that the
+board did not do it. Checkable is not true, and it is not even a promise. Five tests hold that line
+so nobody quietly turns the Gate into a sincerity detector:
+`test_quantity_negation_still_counts_as_present`, `test_target_year_negation_still_counts_as_present`,
+`test_baseline_year_negation_still_counts_as_present`,
+`test_named_standard_negation_still_counts_as_present` and
+`test_accountable_party_negation_still_counts_as_present`, with the reasoning written into
+`tests/test_probes.py` itself: *"the probe checks whether a number is stated, not whether the claim
+is honest."* Nothing is inflated at the bottom of the range either. Empty input, whitespace and 10 KB
+of junk all score 0/5 Unverifiable. The limit this leaves is real and worth saying plainly: noticing
+the word "not" is still a reader's job.
+
 **Pinned by.** `tests/test_probes.py`, thirty tests, six per probe: present, absent, boundary,
 negation, unicode and typography, and the known weakness asserted as a miss rather than papered
 over. Specifically `test_quantity_misses_word_numbers_like_halve` and

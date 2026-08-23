@@ -26,10 +26,30 @@ deterministic on a machine with no API keys configured at all — e.g. a judge's
 whatever `--out` path it is given, so these tests exercise the actual code path that
 caused the bug (does killswitch.py pass --out? does it ever target the real path? does the
 restore fire even on a mid-run failure?) without depending on live model access.
+
+SECOND BUG, R-05 (red team, `.crew/BOARD.md`, found recurring twice during a live attack):
+this file's fake subprocess writes its fixture to "whatever --out path it is given" — and
+the path it was given, every run, was `killswitch.ON_SNAPSHOT` / `killswitch.OFF_SNAPSHOT`,
+i.e. the REAL, git-tracked `deliverables/runs/killswitch.{on,off}.json`. `setUp`/`tearDown`
+below protected `deliverables/results.json` (the file the first bug clobbered) but never
+protected these two files, so every test run in this file overwrote the real deliverable
+with `{"claim_id": "fake-claim-1", "text": "fixture claim", ...}` — a test mutating a
+shipped artifact, exactly the pattern that sank a Gemini-3 winner publicly. Whichever ran
+last, `./run.sh test` or `./run.sh killswitch`, decided what a judge would find on disk.
+
+FIX: `setUp` now points `killswitch.RUNS_DIR` / `killswitch.ON_SNAPSHOT` /
+`killswitch.OFF_SNAPSHOT` at a `tempfile.TemporaryDirectory()` for the duration of each
+test in this file, via `mock.patch.object` (`main()` reads these as module globals at call
+time, so patching the module attributes redirects every write `_run_gate` makes without
+touching `harness/killswitch.py`'s production code at all — production runs are
+unaffected). No test in this file may write to `deliverables/` at all now; that is pinned
+directly by `TestKillswitchSideEffectsNeverTouchDeliverables` below, and by the
+suite-wide `tests/test_deliverables_untouched.py`.
 """
 from __future__ import annotations
 
 import json
+import tempfile
 import unittest
 from pathlib import Path
 from unittest import mock
@@ -38,6 +58,7 @@ import harness.killswitch as killswitch
 
 ROOT = Path(__file__).resolve().parent.parent
 RESULTS = ROOT / "deliverables" / "results.json"
+REAL_RUNS_DIR = ROOT / "deliverables" / "runs"
 
 
 def _fake_result(*, layer: str, provider: str) -> dict:
@@ -90,6 +111,24 @@ class TestKillswitchDoesNotClobberResults(unittest.TestCase):
             {"sentinel": "pre-killswitch deliverable", "model_layer": "on", "real": True}
         ).encode()
         RESULTS.write_bytes(self._sentinel)
+
+        # R-05 fix: redirect the on/off snapshot paths to a scratch directory for the
+        # duration of this test, so the fake subprocess above (which writes to whatever
+        # --out path killswitch.py hands it) can never land on the real, git-tracked
+        # deliverables/runs/killswitch.{on,off}.json. killswitch.main() reads
+        # RUNS_DIR/ON_SNAPSHOT/OFF_SNAPSHOT as module globals at call time, so patching
+        # the module attributes is enough -- no change to harness/killswitch.py itself.
+        self._tmp = tempfile.TemporaryDirectory()
+        self.addCleanup(self._tmp.cleanup)
+        tmp_runs_dir = Path(self._tmp.name)
+        patcher = mock.patch.multiple(
+            killswitch,
+            RUNS_DIR=tmp_runs_dir,
+            ON_SNAPSHOT=tmp_runs_dir / "killswitch.on.json",
+            OFF_SNAPSHOT=tmp_runs_dir / "killswitch.off.json",
+        )
+        patcher.start()
+        self.addCleanup(patcher.stop)
 
     def tearDown(self):
         if self._original is not None:

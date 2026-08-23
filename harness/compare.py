@@ -213,8 +213,9 @@ def find_gate_misses(
     fields: list[str],
 ) -> list[tuple[str, str]]:
     """(claim_id, field) pairs where gold says present, the Gate says absent, and the
-    baseline correctly said present. This IS "where the single prompt beats us" —
-    restricted to SCORED_FIELDS by the caller so the accountable_party construct conflict
+    baseline correctly said present — a false NEGATIVE the single prompt avoids. This is
+    HALF of "where the single prompt beats us"; see find_gate_overfires for the other half.
+    Restricted to SCORED_FIELDS by the caller so the accountable_party construct conflict
     never gets silently counted as a Gate defect."""
     misses = []
     for cid in claim_ids:
@@ -225,6 +226,35 @@ def find_gate_misses(
             if gold[cid][f] and not gate_preds[cid][f] and b[f]:
                 misses.append((cid, f))
     return misses
+
+
+def find_gate_overfires(
+    gold: dict[str, dict],
+    gate_preds: dict[str, dict],
+    baseline_preds: dict[str, dict | None],
+    claim_ids: list[str],
+    fields: list[str],
+) -> list[tuple[str, str]]:
+    """(claim_id, field) pairs where gold says absent, the Gate says present, and the
+    baseline correctly said absent — a false POSITIVE the single prompt avoids. The mirror
+    image of find_gate_misses.
+
+    R-08 (red team, .crew/BOARD.md): an earlier version of this file counted only
+    find_gate_misses and reported that count as the total of "where the single prompt beats
+    us." That undercounted it — a Gate false positive the baseline correctly avoids is just
+    as much a case of "the single prompt beats us" as a false negative is, and this file has
+    a whole paragraph two sections down (`named_standard`'s Scope 1/2/3 false positives)
+    describing exactly this failure mode without ever adding it to the headline count.
+    misses + overfires together is the honest total."""
+    overfires = []
+    for cid in claim_ids:
+        b = baseline_preds.get(cid)
+        if b is None:
+            continue
+        for f in fields:
+            if not gold[cid][f] and gate_preds[cid][f] and not b[f]:
+                overfires.append((cid, f))
+    return overfires
 
 
 # --------------------------------------------------------------------------- formatting
@@ -292,15 +322,29 @@ def build_markdown(data: dict) -> str:
     a("## Where the single prompt beats us")
     a("")
     a(
-        f"Across the 60 gold-labelled claims, the Gate misses **{data['n_gate_misses']} "
-        "field-level checks that the single-prompt baseline gets right** — every one of "
-        "them `quantity` or `baseline_year`, none of them `accountable_party` (that field's "
-        "disagreement is a definitional conflict between two rubrics, not a Gate defect — "
-        "see below, and it is deliberately excluded from this count). Five, quoted in full:"
+        f"Across the 60 gold-labelled claims, the honest total is **{data['n_gate_wrong_total']} "
+        "field-level checks the single-prompt baseline gets right and the Gate gets "
+        f"wrong**: **{data['n_gate_misses']} misses** (gold says present, the Gate says "
+        f"absent, the baseline correctly says present) plus **{data['n_gate_overfires']} "
+        "over-fires** (gold says absent, the Gate says present, the baseline correctly "
+        "says absent). Both halves are counted the same way and both exclude "
+        "`accountable_party` (that field's disagreement is a definitional conflict between "
+        "two rubrics, not a Gate defect — see below). Not counted, in either direction: "
+        "cases where the baseline is ALSO wrong on the same field — that is a shared miss, "
+        "not the single prompt beating us. Every one of the 11 misses is `quantity` or "
+        "`baseline_year`; two of the three over-fires are the `named_standard`/Scope bug "
+        "documented below (**R-01**), the third is a new `baseline_year` false positive — "
+        "the probe matches any nearby year, not necessarily the one attached to a "
+        "reduction target. Five misses, quoted in full:"
     )
     a("")
     for cid, field, text, why in data["miss_examples"]:
         a(f"- **`{cid}` — `{field}` missed.** \"{text}\" — {why}")
+    a("")
+    a("And all three over-fires, quoted in full:")
+    a("")
+    for cid, field, text, why in data["overfire_examples"]:
+        a(f"- **`{cid}` — `{field}` over-fired.** \"{text}\" — {why}")
     a("")
     a(
         "All nine `quantity` misses split into two distinct, disclosed failure modes, "
@@ -624,6 +668,35 @@ MISS_EXAMPLES_SOURCE = [
     ),
 ]
 
+OVERFIRE_EXAMPLES_SOURCE = [
+    (
+        "cab9279cadc9",
+        "named_standard",
+        "Sixty-nine percent reduction of absolute Scope 1 and Scope 2 GHG emissions from "
+        "Nike Operations in FY24, compared to a FY20 baseline.",
+        "\"Scope 1\" is matched as a named standard, but a bare Scope mention names no "
+        "standard by itself — the disclosed `named_standard` false-positive bug (**R-01**).",
+    ),
+    (
+        "11e64368bcac",
+        "named_standard",
+        "Thirty-six percent reduction of absolute Scope 3 GHG emissions from Nike's "
+        "manufacturing and transportation in FY24, versus a FY20 baseline.",
+        "a second, confirming case of the same Scope false positive (**R-01**).",
+    ),
+    (
+        "280e8280df99",
+        "baseline_year",
+        "We will fund this in part by expanding our internal carbon fee, in place since "
+        "2012 and increased last year, to start charging not only our direct emissions, "
+        "but those from our supply and value chains.",
+        "\"2012\" is matched as a baseline year, but it is the year an internal carbon "
+        "fee started, not a stated baseline for a reduction target — the probe fires on "
+        "any nearby year, not specifically one attached to a target. A new, previously "
+        "undisclosed gap, found while fixing R-08.",
+    ),
+]
+
 
 def main() -> int:
     pack = load_pack(PACK_PATH)
@@ -685,6 +758,7 @@ def main() -> int:
     agg = self_agreement(baseline_runs_list, all_claim_ids, FIELDS)
 
     misses = find_gate_misses(gold, gate_preds_gold, baseline_preds[1], ordered_gold_ids, SCORED_FIELDS)
+    overfires = find_gate_overfires(gold, gate_preds_gold, baseline_preds[1], ordered_gold_ids, SCORED_FIELDS)
 
     gold_accountable_true = sum(1 for cid in ordered_gold_ids if gold[cid]["accountable_party"])
     gate_accountable_true = sum(1 for cid in ordered_gold_ids if gate_preds_gold[cid]["accountable_party"])
@@ -708,7 +782,10 @@ def main() -> int:
     data = {
         "n_frozen": len(claims),
         "n_gate_misses": len(misses),
+        "n_gate_overfires": len(overfires),
+        "n_gate_wrong_total": len(misses) + len(overfires),
         "miss_examples": MISS_EXAMPLES_SOURCE,
+        "overfire_examples": OVERFIRE_EXAMPLES_SOURCE,
         "gate_confusion": gate_confusion,
         "baseline_confusion": baseline_confusion,
         "gate_overall_acc_5": accuracy(gate_overall_5),
@@ -734,7 +811,9 @@ def main() -> int:
 
     OUT.write_text(build_markdown(data))
     print(f"wrote {OUT}")
-    print(f"  Gate misses (single prompt right, Gate wrong, excl. accountable_party): {len(misses)}")
+    print(f"  Gate wrong, baseline right, excl. accountable_party (TOTAL): {len(misses) + len(overfires)}")
+    print(f"    misses (Gate false negative): {len(misses)}")
+    print(f"    over-fires (Gate false positive): {len(overfires)}")
     print(f"  Arm A exact-match (5-field): {gate_exact_5[0]}/{gate_exact_5[1]}")
     print(f"  Arm B run1 exact-match (5-field): {baseline_exact_5[1][0]}/{baseline_exact_5[1][1]}")
     print(
