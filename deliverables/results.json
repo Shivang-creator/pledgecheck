@@ -1,0 +1,19 @@
+{
+  "pack_version": "0.0.1-STUB",
+  "generated_at": "2026-08-23T17:38:38.221963+00:00",
+  "model_layer": "off",
+  "claims": [
+    {
+      "claim_id": "stub00000001",
+      "text": "STUB \u2014 real claims land after T-02/T-04/T-07.",
+      "score": 0,
+      "max_score": 5,
+      "verdicts": [],
+      "pack_version": "0.0.1-STUB"
+    }
+  ],
+  "documents": [],
+  "corpus": {
+    "note": "STUB"
+  }
+}
