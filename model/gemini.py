@@ -162,18 +162,19 @@ def call(prompt: str, *, timeout: int = 60) -> str | None:
             last_reason = f"HTTP {exc.code} from Gemini ({exc.reason})"
             retry_after = _retry_after_seconds(exc)
             if exc.code == 429:
-                body = ""
+                # Not `body`: that name holds the request payload the retry re-sends.
+                error_body = ""
                 try:
-                    body = exc.read().decode("utf-8", errors="replace")
+                    error_body = exc.read().decode("utf-8", errors="replace")
                 except Exception:
                     pass
-                if "PerDay" in body:
+                if "PerDay" in error_body:
                     # Confirmed: Google's own RESOURCE_EXHAUSTED body naming a *daily*
                     # quota metric (e.g. GenerateRequestsPerDayPerProjectPerModel-
                     # FreeTier), not a per-minute one — retrying THIS call cannot
                     # succeed, and neither can any other call in this process today.
                     _daily_quota_confirmed_exhausted = True
-                    last_reason = f"HTTP 429 RESOURCE_EXHAUSTED — daily quota (not per-minute): {body[:200]}"
+                    last_reason = f"HTTP 429 RESOURCE_EXHAUSTED — daily quota (not per-minute): {error_body[:200]}"
                     break
             if exc.code == 429 or exc.code >= 500:
                 # Rate-limited or a server-side error — both transient, both worth a
